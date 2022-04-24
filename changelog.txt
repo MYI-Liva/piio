@@ -1,0 +1,2 @@
+added PiioConnector.getPlayersByPosition()
+returns players ordered by seat order, from left to right

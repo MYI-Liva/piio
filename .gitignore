@@ -1,3 +1,6 @@
+settings.db
+release-builds
+
 # Logs
 logs
 *.log

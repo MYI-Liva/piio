@@ -1,0 +1,65 @@
+
+
+
+#main {
+	position:absolute;
+	left:0;
+	right:0;
+	top:24px;
+	bottom:0;
+}
+
+#cont {
+	padding:10px;
+	max-width:500px;
+	margin:0 auto;
+}
+
+.item {
+	position: relative;
+	padding:10px;
+	margin:10px;
+	background:rgba(0,0,0,0.2);
+
+	display:grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: auto 30px auto;
+	grid-gap: 10px;
+	justify-items: stretch;
+	align-items: stretch;
+}
+
+.label {
+	opacity:0.5;
+}
+
+.description {
+	opacity:0.5;
+	font-size:10px;
+}
+
+.saved {
+	position:absolute;
+	right:5px;
+	top:5px;
+	width:16px;
+	height:16px;
+	border-radius: 50%;
+	background:#000;
+	transition:background 3000ms; 
+}
+
+.saved.pending {
+	background:#aa0;
+	transition:background 0ms; 
+}
+
+.saved.success {
+	background:#0a0;
+	transition:background 200ms; 
+}
+
+.saved.failed {
+	background:#f00;
+	transition:background 200ms; 
+}

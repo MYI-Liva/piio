@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Settings</title>
+		<base href="../" />
+	
+		<script type="text/javascript" src="js/class/db.class.js"></script>
+		
+		<script type="text/javascript" src="js/general.js"></script>
+		<script type="text/javascript" src="js/settings.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="style/general.css" />
+		<link rel="stylesheet" type="text/css" href="style/settings.css" />
+		<link rel="stylesheet" type="text/css" href="style/dark.css" />
+	</head>
+	<body>
+		<div id="titlebar"></div>
+		<div id="main">
+			<div id="cont">
+				<div class="item">
+					<div class="label">Autoupdate Threshold</div>
+					<div class="saved" id="autoupdateThreshold-saved"></div>
+					<div>
+						<input type="number" id="autoupdateThreshold-value" oninput="set('autoupdateThreshold', this.value)" value="500" style="text-align:right;width:50px;" />ms
+					</div>
+					<div class="description">
+						The amount of of time to wait after typing before automatic updating the overlays
+					</div>
+				</div>
+				<div class="item">
+					<div class="label">Dynamic Sidebar</div>
+					<div class="saved" id="fixedSidebar-saved"></div>
+					<select id="fixedSidebar-value" onchange="set('fixedSidebar', this.value == 1)">
+						<option value="0">Show sidebar on Mouse hover</option>
+						<option value="1">Always show sidebar</option>
+					</select>
+					<div class="description">
+						Toggle if the sidebar should hide itself or stay visible.
+					</div>
+				</div>
+				<div class="item">
+					<div class="label">Smash.gg queue</div>
+					<div class="saved" id="fixedSmashggQueue-saved"></div>
+					<select id="fixedSmashggQueue-value" onchange="set('fixedSmashggQueue', this.value == 1)">
+						<option value="0">Dropdown list on bottom right</option>
+						<option value="1">Stick to right side</option>
+					</select>
+					<div class="description">
+						Toggle if the Smash.gg queue list should hide itself or stay visible.
+					</div>
+				</div>
+				<div class="item">
+					<div class="label">Smash.gg Token</div>
+					<div class="saved" id="smashgg-token-saved"></div>
+					<input type="text" id="smashgg-token-value" oninput="set('smashgg-token', this.value)" value="" placeholder="Your developer token" />
+					<div class="description">
+						In order to access smash.gg’s API, you must enter an authentication token. 
+						These tokens can be created from the Developer Settings page in your Smash.gg account settings. 
+						<a href="javascript:shell.openExternal('https://developer.smash.gg/docs/authentication');">How to generate your Token</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>
