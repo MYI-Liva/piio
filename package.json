@@ -8,7 +8,7 @@
     "debug": "electron . --debug=true --port=8000",
     "package-win": "electron-packager . piio --ignore=\"(settings.db|windowConf.db)\" --out=release-builds --prune=true --overwrite --platform=win32 --arch=x64",
     "package-win-asar": "electron-packager . piio --out=release-builds --prune=true --overwrite --asar --platform=win32 --arch=x64",
-    "make-linux": "electron-builder build --linux AppImage",
+    "make-linux": "electron-builder build --linux",
     "create-installer-win": "node installers/windows/createinstaller.js",
     "build": "npm run package-win && npm run create-installer-win",
     "build-asar": "npm run package-win-asar && npm run create-installer-win"
@@ -16,10 +16,26 @@
   "keywords": [
     "piio"
   ],
-  "author": "Philipp Buerkner",
+  "author": {
+    "name" : "Jonas Hartmer",
+    "email" : "dortimus51@gmail.com"
+  },
   "license": "UNLICENSED",
 
   "build": {
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "description": "Production Interface IO"
+    },
     "appId": "de.piio",
     "productName": "piio",
     "target": "AppImage",
