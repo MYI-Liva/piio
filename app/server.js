@@ -9,7 +9,7 @@ const WebSocket = require('ws');
 function Server(){
 	this.server = express();
 	this.expressWs = ExpressWs(this.server);
-	this.port = 80;
+	this.port = 8000;
 	this.pingInterval = 10; // seconds
 	this.socket = require('dgram').createSocket('udp4');
 	
@@ -17,7 +17,6 @@ function Server(){
 
 	this.theme = "";
 	this.webPath = "";
-	this.root = "";
 	this.themeManifest = {};
 	this.msgCache = {};
 
@@ -38,7 +37,7 @@ Server.prototype.start = async function start(){
 
 	this.dynStatic = this.createDynStatic(path.join(this.webPath, 'themes/'+this.theme));
 	this.server.use('/assets', express.static(path.join(this.webPath, 'assets')));
-	this.server.use('/class', express.static(path.join(this.root, 'js/class')));
+	this.server.use('/class', express.static(path.join(process.resourcesPath, 'js2/class')));
 	this.server.get('/:filename', (req, res, next) => {
 		try {
 			let cont = fs.readFileSync(path.join(this.webPath, 'themes/'+this.theme, req.params.filename+".html"), 'utf8');
@@ -82,11 +81,11 @@ Server.prototype.start = async function start(){
 	
 	this.server.get('/all.js', (req, res) => {
 		res.writeHead(200, {'Content-Type': 'text/javascript'});
-		fs.readdir(path.join(this.root, 'js/class'), (err, files) => {
+		fs.readdir(path.join(process.resourcesPath, 'js2/class'), (err, files) => {
 			if(err) throw err;
 			files.forEach(file => {
 				if(file.endsWith(".class.js")){
-					let cont = fs.readFileSync(path.join(this.root, 'js/class/'+file), 'utf8');
+					let cont = fs.readFileSync(path.join(process.resourcesPath, 'js2/class/'+file), 'utf8');
 					let firstLine = cont.substr(0, cont.indexOf("\r\n"));
 					if(!firstLine.includes("--exclude-from-all")){ 
 						res.write("\r\n/* ------------- */\r\n");
@@ -97,7 +96,7 @@ Server.prototype.start = async function start(){
 				}
 			});
 			// get overlay utils file
-			let cont = fs.readFileSync(path.join(this.root, 'js/overlay-utils.js'), 'utf8');
+			let cont = fs.readFileSync(path.join(process.resourcesPath, 'js2/overlay-utils.js'), 'utf8');
 			res.write("\r\n/* ------------- */\r\n");
 			res.write("/* overlay-utils.js */\r\n");
 			res.write("/* ------------- */\r\n");

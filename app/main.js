@@ -36,7 +36,7 @@ var clientSettings = new nedb({ filename: path.join(APPUSERDATA, 'settings.db'),
 
 // init server
 let server = new PiioServer();
-server.port = global.ARGV.port || 80;
+server.port = global.ARGV.port || 8000;
 server.root = APPROOT;
 
 server.on("listening", electron.createMainWindow);

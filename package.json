@@ -5,9 +5,10 @@
   "main": "app/main.js",
   "scripts": {
     "start": "electron .",
-    "debug": "electron . --debug=true --port=80",
+    "debug": "electron . --debug=true --port=8000",
     "package-win": "electron-packager . piio --ignore=\"(settings.db|windowConf.db)\" --out=release-builds --prune=true --overwrite --platform=win32 --arch=x64",
     "package-win-asar": "electron-packager . piio --out=release-builds --prune=true --overwrite --asar --platform=win32 --arch=x64",
+    "make-linux": "electron-builder build --linux AppImage",
     "create-installer-win": "node installers/windows/createinstaller.js",
     "build": "npm run package-win && npm run create-installer-win",
     "build-asar": "npm run package-win-asar && npm run create-installer-win"
@@ -17,11 +18,28 @@
   ],
   "author": "Philipp Buerkner",
   "license": "UNLICENSED",
+
+  "build": {
+    "appId": "de.piio",
+    "productName": "piio",
+    "target": "AppImage",
+    "icon": "img/PIIO.png",
+    "extraResources": [
+      "**js2/class/*",
+      "**js2/*"
+    ],
+    
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
+  },
   "devDependencies": {
     "debug": "^4.1.1",
     "electron": "^8.5.5",
     "electron-packager": "^13.1.1",
-    "electron-winstaller": "^3.0.4"
+    "electron-winstaller": "^3.0.4",
+    "electron-builder": "^22.14.5"
   },
   "dependencies": {
     "express": "^4.16.4",
@@ -29,5 +47,38 @@
     "fs-extra": "^7.0.1",
     "nedb": "^1.8.0",
     "ws": "^6.1.0"
+  },
+
+    "config": {
+      "forge": {
+        "packagerConfig": {
+          "executableName": "SlippiStreamTool",
+          "icon": "script/icon.ico"
+        },
+        "makers": [
+          {
+            "name": "@electron-forge/maker-squirrel",
+            "config": {
+              "name": "SlippiStreamTool",
+              "title": "Slippi Stream Tool",
+              "author": "Jonas Hartmer"
+            }
+          },
+          {
+            "name": "@electron-forge/maker-zip",
+            "platforms": [
+              "darwin"
+            ]
+          },
+          {
+            "name": "@electron-forge/maker-deb",
+            "config": {}
+          },
+          {
+            "name": "@electron-forge/maker-rpm",
+            "config": {}
+          }
+        ]
+      }
+    }
   }
-}
