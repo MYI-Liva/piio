@@ -23,7 +23,7 @@
     "appId": "de.piio",
     "productName": "piio",
     "target": "AppImage",
-    "icon": "img/PIIO.png",
+    "icon": "app/logo.png",
     "extraResources": [
       "**js2/class/*",
       "**js2/*"
@@ -53,7 +53,7 @@
       "forge": {
         "packagerConfig": {
           "executableName": "SlippiStreamTool",
-          "icon": "script/icon.ico"
+          "icon": "app/logo.png"
         },
         "makers": [
           {
