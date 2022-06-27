@@ -4,7 +4,6 @@ if (setupEvents.handleSquirrelEvent()) {
 	// squirrel event handled and app will exit in 1000ms, so don't do anything else
 	return;
 }
-
 const electron = require('./electron.js');
 const PiioServer = require('./server.js');
 const database = require('./db.js');
@@ -27,7 +26,13 @@ _debug = global.ARGV.hasOwnProperty("debug") && global.ARGV.debug !== 'false';
 var APPROOT = global.APPROOT = electron.APP.getAppPath();
 var APPRES = global.APPRES = electron.APP.getAppPath();
 var APPUSERDATA = global.APPUSERDATA = electron.APP.getPath("userData");
-
+function folder(){
+	if (process.platform === "win32") {
+		return(path.join(APPROOT, 'js'));
+	}else{
+		return(path.join(process.resourcesPath, 'js2'));
+	}
+}
 var sessionTimestamp = new Date().getTime();
 var clientSettings = new nedb({ filename: path.join(APPUSERDATA, 'settings.db'), autoload :true});
 
@@ -36,8 +41,15 @@ var clientSettings = new nedb({ filename: path.join(APPUSERDATA, 'settings.db'),
 
 // init server
 let server = new PiioServer();
-server.port = global.ARGV.port || 80;
-server.root = APPROOT;
+function port(){
+	if (process.platform === "win32") {
+		return(80);
+	}else{
+		return(8000);
+	}
+}
+server.port = global.ARGV.port || port();
+	server.root = folder();
 
 server.on("listening", electron.createMainWindow);
 server.on("themefolder-changed", () => electron.send("themefolder-changed"));
