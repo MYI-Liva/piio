@@ -1,9 +1,16 @@
 const {ipcRenderer, remote} = require('electron');
 const WebSocket = require("ws");
-
 var _callbacks = {on:{}, once:{}, hold:[]}; 
+function port(){
+	if (process.platform === "win32") {
+		return(80);
+	}else{
+		
+		return(8000);
+	}
 
-var _ws = new WebSocket("ws://127.0.0.1:8000");
+}
+var _ws = new WebSocket("ws://127.0.0.1:" + port());
 _ws.onopen = () => {
 	_ws.send(JSON.stringify([
 		{"type":"subscribe", "data":"registered-overlays"},

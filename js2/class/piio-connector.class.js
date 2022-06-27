@@ -1,5 +1,3 @@
-
-
 class PiioConnector {
 	constructor(name, requests, subscriptions){
 		this.address = location.hostname;
