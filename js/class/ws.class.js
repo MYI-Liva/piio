@@ -1,10 +1,27 @@
+var process2;
+if(navigator.appVersion.indexOf("Win") != -1){
+	process2 = 80;
+}else{
+	process2 = 8000;
+}
+var declared = true;
+try{
+    theVariable;
+}
+catch(e) {
+    if(e.name == "ReferenceError") {
+        declared = false;
+    }
+}
+if(declared){
+	process2 = process;
+}
 class WSWrapper {
 	constructor(url, port, autoconnect){
 		autoconnect = (autoconnect == null ? true : autoconnect);
 		this.ws = null;
 		this.url = url || "127.0.0.1";
-		
-		this.port = port || 8000;
+		this.port = port || process2;
 		this.reconnect = true;
 		this.reconnectAttempts = 5;
 		this.reconnectCounter = 0;

@@ -4,24 +4,44 @@
   "description": "Piio is a live production interface software",
   "main": "app/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron . --debug=true",
     "debug": "electron . --debug=true --port=8000",
-    "package-win": "electron-packager . piio --ignore=\"(settings.db|windowConf.db)\" --out=release-builds --prune=true --overwrite --platform=win32 --arch=x64",
-    "package-win-asar": "electron-packager . piio --out=release-builds --prune=true --overwrite --asar --platform=win32 --arch=x64",
     "make-linux": "electron-builder build --linux",
-    "create-installer-win": "node installers/windows/createinstaller.js",
-    "build": "npm run package-win && npm run create-installer-win",
-    "build-asar": "npm run package-win-asar && npm run create-installer-win"
+    "make-windows": "electron-forge make --platform win32"
   },
   "keywords": [
     "piio"
   ],
   "author": {
-    "name" : "Jonas Hartmer",
-    "email" : "dortimus51@gmail.com"
+    "name" : "Philipp Buerkner"
   },
   "license": "UNLICENSED",
 
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel",
+          "zip"
+          ]
+        },
+      "packagerConfig": {
+        "executableName": "piio",
+        "icon": "./app/logo.ico"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "piio",
+            "title": "Production Interface IO",
+            "setupIcon": "./app/logo.ico",
+            "loadingGif": "img/loading.gif"
+          }
+        }
+      ]
+    }
+  },
   "build": {
     "linux": {
       "target": [
@@ -38,24 +58,22 @@
     },
     "appId": "de.piio",
     "productName": "piio",
-    "target": "AppImage",
     "icon": "app/logo.png",
     "extraResources": [
       "**js2/class/*",
       "**js2/*"
-    ],
-    
-    "nsis": {
-      "allowToChangeInstallationDirectory": true,
-      "oneClick": false
-    }
+    ]
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.61",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
+    "@electron-forge/maker-zip": "^6.0.0-beta.61",
     "debug": "^4.1.1",
     "electron": "^8.5.5",
     "electron-packager": "^13.1.1",
     "electron-winstaller": "^3.0.4",
-    "electron-builder": "^22.14.5"
+    "electron-builder": "^22.14.5",
+    "electron-forge-maker-appimage": "^22.14.7"
   },
   "dependencies": {
     "express": "^4.16.4",
@@ -63,38 +81,5 @@
     "fs-extra": "^7.0.1",
     "nedb": "^1.8.0",
     "ws": "^6.1.0"
-  },
-
-    "config": {
-      "forge": {
-        "packagerConfig": {
-          "executableName": "SlippiStreamTool",
-          "icon": "app/logo.png"
-        },
-        "makers": [
-          {
-            "name": "@electron-forge/maker-squirrel",
-            "config": {
-              "name": "SlippiStreamTool",
-              "title": "Slippi Stream Tool",
-              "author": "Jonas Hartmer"
-            }
-          },
-          {
-            "name": "@electron-forge/maker-zip",
-            "platforms": [
-              "darwin"
-            ]
-          },
-          {
-            "name": "@electron-forge/maker-deb",
-            "config": {}
-          },
-          {
-            "name": "@electron-forge/maker-rpm",
-            "config": {}
-          }
-        ]
-      }
-    }
   }
+}
