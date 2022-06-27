@@ -30,7 +30,7 @@ function folder(){
 	if (process.platform === "win32") {
 		return(path.join(APPROOT, 'js'));
 	}else{
-		server.root = path.join(process.resourcesPath, 'js2');
+		return(path.join(process.resourcesPath, 'js2'));
 	}
 }
 var sessionTimestamp = new Date().getTime();
