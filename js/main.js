@@ -38,6 +38,7 @@ var scoreboard = {
 	seatorder:[],
 	ports:[],
 	fields:{},
+	strikes: [],
 	game:null,
 	smashgg:null,
 	smashggtoken:null,
@@ -65,6 +66,9 @@ on("load", init);
 on("load", buildPlayerAutoCompleteList);
 on("load", clockUpdate);
 on("load", buildGameSelection);
+on("load", buildStageStriking);
+on("gamechanged", buildStageStriking);
+on("scoreboardchanged", buildStageStriking);
 on("scoreboardchanged", autoUpdate);
 on("scoreboardteamschanged", insertTeamUI);
 on("scoreboardteamschanged", buildSeatOrder);
@@ -590,6 +594,7 @@ function setTeamType(num){
 function resetScore(){
 	modifyScore(1, 0, true);
 	modifyScore(2, 0, true);
+	scoreboard.strikes = []
 }
 
 function modifyScore(team, inc, absolute){
@@ -622,6 +627,7 @@ function clearBoard(){
 	}
 	scoreboard.ports = [null,null,null,null];
 	scoreboard.smashgg = null;
+	scoreboard.strikes = []
 	
 	fire("scoreboardsmashggchanged");
 	fire("scoreboardteamschanged");
@@ -994,6 +1000,73 @@ function toggleSeatorderGlue(){
 	document.getElementById('seatorder-glue-option').classList.toggle("enabled");
 	buildSeatOrder();
 }
+/**
+ * 
+ * @param {string} stage 
+ */
+function strikeStage(stageId) {
+	const alreadyStruck = scoreboard.strikes.findIndex(s => s === stageId)
+
+	if (alreadyStruck !== -1) {
+		scoreboard.strikes.splice(alreadyStruck, 1)
+	} else {
+		scoreboard.strikes.push(stageId)
+	}
+}
+
+function resetStrikes() {
+	scoreboard.strikes = []
+}
+
+async function buildStageStriking() {
+	const game = await db.getSingle('game', scoreboard.game)
+	const gameShort = game.shorten;
+
+	const stages = {
+		ssbm: [
+			{name: "Battlefield", id: "bf"},
+			{name: "Dreamland", id: "dl"},
+			{name: "Fountain Of Dreams", id: "fod"},
+			{name: "Yoshi's Story", id: "ys"},
+			{name: "Pokemon Stadium", id: "ps"},
+		]
+	}
+	
+	console.log(scoreboard)
+
+	const element = document.getElementById('stages')
+	element.innerHTML = '';
+
+	if (!stages[gameShort]?.length) {
+		element.parentElement.classList.add('d-none')
+		return
+	}
+	
+	for (const stage of stages[gameShort]) {
+		let className = 'stage'
+		console.log(scoreboard.strikes, stage.id)
+		if (scoreboard.strikes.includes(stage.id)) {
+			className = className.concat(' struck')
+		}
+		const stg = createElement({
+			id: stage.id,
+			className,
+			onclick: () =>  {
+				strikeStage(stage.id)
+				console.log(scoreboard.strikes)
+				fire("scoreboardchanged")
+			}
+		})
+
+		element.appendChild(stg)
+	}
+
+	element.parentElement.classList.remove('d-none')
+
+
+
+
+}
 
 function buildSeatOrder(affectedSeat){
 	var el = document.getElementById('seatorder').truncate();
@@ -1138,7 +1211,7 @@ function createField(field){
 	inputElm.id = "field-"+field.name;
 	inputElm.addEventListener("input", (e) => {
 		scoreboard.fields[field.name].value = e.target.value;
-		fire("scoreboardchanged");
+		fire("scoreboardchanged", true);
 	});
 
 	return el;
@@ -1303,8 +1376,17 @@ function clockUpdate(){
 	setTimeout(clockUpdate, (60 - d.getSeconds()) * 1000);
 }
 
+/**
+ * 
+ * @param {string} field 
+ * @param {string} value 
+ */
+function setFieldValue(field, value) {
+	scoreboard.fields[field].value = value;
+}
 
 function handleWsCommand(data){
+	console.log(data)
 	switch(data.name){
 		case "score":
 			modifyScore(data.team, data.value, data.absolute);
@@ -1323,6 +1405,18 @@ function handleWsCommand(data){
 		break;
 		case "character":
 			setCharacter(data.team, data.player, data.character.id, data.character.skin)
+		break;
+		case "update-field":
+			setFieldValue(data.field, data.value);
+			fire("scoreboardchanged", true);
+		break;
+		case "strike-stage":
+			strikeStage(data.value);
+			fire("scoreboardchanged", true);
+		break;
+		case "reset-strikes":
+			resetStrikes()
+			fire("scoreboardchanged", true);
 		break;
 	}
 }
