@@ -556,7 +556,7 @@ class SmashggWrapper {
 
 }
 
-SmashggWrapper.ENDPOINT = "https://api.smash.gg/gql/alpha";
+SmashggWrapper.ENDPOINT = "https://api.start.gg/gql/alpha";
 
 SmashggWrapper.GROUP_TYPE = {
 	SINGLE_ELIMINATION: 1,
