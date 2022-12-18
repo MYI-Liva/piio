@@ -40,6 +40,7 @@ var scoreboard = {
 	fields:{},
 	game:null,
 	smashgg:null,
+	smashggtoken:null,
 	type:null,
 	_D:null
 };
@@ -143,6 +144,7 @@ async function applyClientSettings(settings){
 			case "theme": await setTheme(row.value); break;
 			case "smashgg-token":
 				smashgg.Token = row.value;
+				scoreboard.smashggtoken = row.value;
 			break;
 			case "autoupdate": toggleAutoUpdate(row.value); break;
 			case "autoupdateThreshold": client.autoupdateThreshold = row.value; break;
