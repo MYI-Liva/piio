@@ -29,6 +29,8 @@ HTMLElement.prototype.insertValueResize = function(customParams){
 		}
 	}
 	
+	
+	
 	this.style.whiteSpace = "nowrap";
 	if(this.watchTimeout)
 		clearTimeout(this.watchTimeout);
@@ -80,6 +82,7 @@ HTMLElement.prototype.insertValueResize = function(customParams){
 
 		if(self.animationTimeout)
 			clearTimeout(self.animationTimeout);
+		
 		if(typeof(params.callback) == "function") params.callback(1); // status callback
 		
 		self.animationTimeout = setTimeout(() => {
