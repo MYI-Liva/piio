@@ -25,6 +25,7 @@ let dbStruct = [
     {"name":"player","field":"twitter","type":"text"},
     {"name":"player","field":"twitch","type":"text","index":-4},
     {"name":"player","field":"steam","type":"text","listhide":true},
+    {"name":"player","field":"slippicode","type":"text"},
     {"name":"player","field":"team","type":"relation","relation":"team","multi":true},
     {"name":"team","field":"name","index":-1,"type":"text"},
     {"name":"team","field":"shorten","index":-2,"type":"text"},

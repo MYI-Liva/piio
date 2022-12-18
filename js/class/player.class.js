@@ -12,6 +12,7 @@ class Player {
 		this.twitter = params.twitter || "";
 		this.twitch = params.twitch || "";
 		this.steam = params.steam || "";
+		this.slippicode = params.slippicode || "";
 		this.country = params.country || "";
 		this.team = params.team || [];
 		this.smashgg = params.smashgg || [];
