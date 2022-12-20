@@ -33,6 +33,8 @@ let dbStruct = [
     {"name":"team","field":"website","index":-4,"type":"text"},
     {"name":"team","field":"delimiter","type":"text","default":" | ","index":-4},
     {"name":"team","field":"regex","type":"text","index":-4},
+    {"name":"team","field":"maincolor","type":"color","index":-4},
+    {"name":"team","field":"secondarycolor","type":"color","index":-4},
     {"name":"country","field":"name","index":-1,"type":"text"},
     {"name":"country","field":"continent","index":-2,"type":"text"},
     {"name":"country","field":"nation","type":"relation","relation":"country","multi":null,"index":-2},

@@ -59,6 +59,10 @@ async function buildForm(){
 				inEl = document.createElement("input");
 				inEl.type = "number";
 				break;
+				case "color":
+					inEl = document.createElement("input");
+					inEl.type = "color";
+					break;
 			case "relation":
 				inEl = document.createElement("select");
 				break;
@@ -106,6 +110,8 @@ async function insertValues(entry){
 				}
 			}else if(field.type == "text" && field.multi){
 				el.value = value ? value.join(',') : "";
+			}else if(field.type == "color"){
+				el.value = (value != null && value != '') ? value : "#000000";
 			}else{
 				el.value = value;
 			}
