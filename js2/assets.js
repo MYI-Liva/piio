@@ -15,7 +15,8 @@ var _relation = {
 	character:["game", "character", null, "character.skins"],
 	player:[null, "player"],
 	country:["country"],
-	game:["game"]
+	game:["game"],
+	team:["team"]
 };
 var _folderTemplate = {
 	character:["{game:id}/{character:id}/stock","{game:id}/{character:id}/portrait"],
@@ -162,6 +163,10 @@ function buildRelatedItem(isFileList, name, dirPath, id, rel){
 		let childElm;
 		if(fs.existsSync(path.join(dirPath, id+".png"))){
 			childElm = buildFileItem(name, dirPath, id+".png");
+		}else if(fs.existsSync(path.join(dirPath, id+".jpg"))){
+			childElm = buildFileItem(name, dirPath, id+".jpg");
+		}else if(fs.existsSync(path.join(dirPath, id+".svg"))){
+			childElm = buildFileItem(name, dirPath, id+".svg");
 		}else{
 			childElm = createElement({className:"item file add"});
 			let labelEl = document.createElement("div");
@@ -240,7 +245,7 @@ function editAsset(name, filePath, uploadFile){
 		}else{
 			file = dialog.showOpenDialog({
 				filters:[
-					{name: 'Images', extensions: ['jpg', 'png', 'gif']}
+					{name: 'Images', extensions: ['jpg', 'png', 'gif', 'svg']}
 				],
 			});
 		}
