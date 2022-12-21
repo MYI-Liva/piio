@@ -219,7 +219,7 @@ class SmashggWrapper {
 			var res = await this.query(`query ($id: ID!) {
 				player(id: $id){ id gamerTag 
 					user {
-						name genderPronoun 
+						name genderPronoun birthday 
 						location {city country countryId state stateId}
 						authorizations { externalUsername type }
 						images { type url }
@@ -496,13 +496,15 @@ class SmashggWrapper {
 			"country":"",
 			"twitter":"",
 			"twitch":"",
-			"steam":""
+			"steam":"",
+			"birthday": ""
 		};
 		if(data.player){
 			fixed.name = data.player.gamerTag;
 		}
 		if(data.user){
 			fixed.pronoun = data.user.genderPronoun || "";
+			fixed.birthday = data.user.birthday == null  || data.user.birthday.split(" ").length - 1 != 2 ? null : this.formatDate(data.user.birthday);
 			if(data.user.name){
 				let nameSplit = data.user.name.split(" ");
 				if(nameSplit.length > 1){
@@ -522,6 +524,19 @@ class SmashggWrapper {
 		}
 
 		return fixed;
+	}
+	static formatDate(date) {
+		var d = new Date(date),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+	
+		if (month.length < 2) 
+			month = '0' + month;
+		if (day.length < 2) 
+			day = '0' + day;
+	
+		return [year, month, day].join('-');
 	}
 
 	static convertCountryName(countryName, countryId){
