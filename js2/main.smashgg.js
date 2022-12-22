@@ -61,7 +61,9 @@ async function applySmashggSet(setId){
 		}
 	}
 	set.eventName = set.event.name;
-	
+	set.slug = set.event.tournament.shortSlug;
+	set.tournamentName = set.event.tournament.name;
+	console.log(set);
 	_theme.fields.forEach((field) => {
 		if(field.hasOwnProperty("smashgg") && field.type == "text" && set.hasOwnProperty(field.smashgg)){
 			document.getElementById('field-'+field.name).value = set[field.smashgg];

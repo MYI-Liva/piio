@@ -139,8 +139,16 @@ class SmashggWrapper {
 							id displayIdentifier bracketType state
 							rounds { id bestOf number }
 						}
-						phases { id name groupCount }
-						videogame { id name displayName slug }
+						phases {
+							id name groupCount
+						}
+						videogame {
+							id name displayName slug
+						}
+						tournament{
+							shortSlug
+							name
+						}
 					}
 				}
 			}`, {"id": setId});
@@ -494,6 +502,7 @@ class SmashggWrapper {
 			"firstname":"",
 			"lastname":"",
 			"country":"",
+			"city":"",
 			"twitter":"",
 			"twitch":"",
 			"steam":"",
@@ -520,6 +529,7 @@ class SmashggWrapper {
 			}
 			if(data.user.location){
 				fixed.country = data.user.location.country;
+				fixed.city = data.user.location.city;
 			}
 		}
 

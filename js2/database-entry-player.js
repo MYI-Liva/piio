@@ -42,6 +42,7 @@ window.addEventListener("load", async () => {
 	}
 	dataset = await db.resolveRelations("player", dataset);
 	dataset = new Player(dataset);
+	console.log(dataset);
 	insertValues(dataset);
 	for(let infoEl of document.querySelectorAll("#info > div")){
 		infoEl.onclick = () => clipboard.writeText(infoEl.innerText, 'selection');
@@ -76,7 +77,6 @@ async function checkSmashggCompare(){
 		const diff = diffs[diffIdx];
 		const diffEl = document.querySelector(`#field-${diff.field} .smashgg-diff`);
 		const field = fields.find(x => x.field == diff.field);
-
 		if(field.type == "relation" && diff.smashgg.length > 0){
 			let relationEntry = await db.getSingle(field.relation, {"name": diff.smashgg});
 			console.log("?", diff.smashgg, relationEntry);
