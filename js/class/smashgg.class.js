@@ -494,6 +494,7 @@ class SmashggWrapper {
 			"firstname":"",
 			"lastname":"",
 			"country":"",
+			"city":"",
 			"twitter":"",
 			"twitch":"",
 			"steam":"",
@@ -520,6 +521,7 @@ class SmashggWrapper {
 			}
 			if(data.user.location){
 				fixed.country = data.user.location.country;
+				fixed.city = data.user.location.city;
 			}
 		}
 

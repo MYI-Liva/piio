@@ -14,6 +14,7 @@ class Player {
 		this.steam = params.steam || "";
 		this.slippicode = params.slippicode || "";
 		this.country = params.country || "";
+		this.city = params.city || null;
 		this.team = params.team || [];
 		this.smashgg = params.smashgg || [];
 		this.smashggIgnore = params.smashggIgnore || {};
@@ -92,6 +93,13 @@ class Player {
 		ignored = this.isSmashggFieldIgnored("twitter", spo.twitterHandle);
 		if(this.twitter != spo.twitterHandle && (includeSmashggIgnore || !ignored)){
 			differences.push({"name":"twitter", "local":this.twitter, "smashgg":spo.twitterHandle, "ignored":ignored});
+			console.log("push twitter. is ignored:", ignored);
+			
+		}
+		
+		ignored = this.isSmashggFieldIgnored("city", spo.twitterHandle);
+		if(this.twitter != spo.twitterHandle && (includeSmashggIgnore || !ignored)){
+			differences.push({"name":"city", "local":this.city, "smashgg":spo.city, "ignored":ignored});
 			console.log("push twitter. is ignored:", ignored);
 			
 		}

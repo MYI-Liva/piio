@@ -17,6 +17,7 @@ let defaultSettings = {
 let dbStruct = [
     {"name":"player","field":"name","type":"text","index":-1},
     {"name":"player","field":"country","type":"relation","relation":"country","index":-4},
+    {"name":"player","field":"city","type":"text"},
     {"name":"player","field":"firstname","type":"text","index":-2},
     {"name":"player","field":"lastname","type":"text","index":-3},
     {"name":"player","field":"birthday","type":"date","listhide":true},
@@ -33,8 +34,8 @@ let dbStruct = [
     {"name":"team","field":"website","index":-4,"type":"text"},
     {"name":"team","field":"delimiter","type":"text","default":" | ","index":-4},
     {"name":"team","field":"regex","type":"text","index":-4},
-    {"name":"team","field":"maincolor","type":"color","index":-4},
-    {"name":"team","field":"secondarycolor","type":"color","index":-4},
+    {"name":"team","field":"backgroundcolor","type":"color","index":-4},
+    {"name":"team","field":"textcolor","type":"color","index":-4},
     {"name":"country","field":"name","index":-1,"type":"text"},
     {"name":"country","field":"continent","index":-2,"type":"text"},
     {"name":"country","field":"nation","type":"relation","relation":"country","multi":null,"index":-2},

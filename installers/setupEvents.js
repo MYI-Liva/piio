@@ -61,32 +61,33 @@ module.exports = {
 				var dbstructDB = new nedb({ filename: path.join(docDir, 'db', 'dbstruct'), autoload:true});
 				dbstructDB.remove({}, { multi: true }, () => {
 					dbstructDB.insert([
-						{"name":"team","field":"delimiter","type":"text","default":" | ","index":-4},
 						{"name":"player","field":"pronoun","type":"text","listhide":true},
 						{"name":"player","field":"birthday","type":"date","listhide":true},
 						{"name":"player","field":"lastname","type":"text","index":-3},
-						{"name":"character","field":"skins","type":"text","multi":true},
 						{"name":"player","field":"team","type":"relation","relation":"team","multi":true},
-						{"name":"team","field":"website","index":-4,"type":"text"},
 						{"name":"player","field":"firstname","type":"text","index":-2},
-						{"name":"team","field":"regex","type":"text","index":-4},
-						{"name":"country","field":"continent","index":-2,"type":"text"},
-						{"name":"game","field":"name","type":"text","index":-1},
-						{"name":"character","field":"name","type":"text","relation":null,"multi":null},
 						{"name":"player","field":"country","type":"relation","relation":"country","index":-4},
-						{"name":"character","field":"game","type":"relation","relation":"game","multi":null},
-						{"name":"country","field":"nation","type":"relation","relation":"country","multi":null,"index":-2},
-						{"name":"country","field":"name","index":-1,"type":"text"},
 						{"name":"player","field":"name","type":"text","index":-1},
-						{"name":"game","field":"shorten","type":"text","index":-2},
-						{"name":"character","field":"shorten","type":"text","relation":null,"multi":null},
 						{"name":"player","field":"twitch","type":"text","index":-4},
 						{"name":"player","field":"steam","type":"text","listhide":true},
-						{"name":"team","field":"prefix","index":-3,"type":"text"},
-						{"name":"team","field":"shorten","index":-2,"type":"text"},
 						{"name":"player","field":"twitter","type":"text"},
 						{"name":"player","field":"smashgg","type":"number"},
-						{"name":"team","field":"name","index":-1,"type":"text"}
+						{"name":"player","field":"city","type":"text"},
+						{"name":"character","field":"skins","type":"text","multi":true},
+						{"name":"character","field":"name","type":"text","relation":null,"multi":null},
+						{"name":"character","field":"game","type":"relation","relation":"game","multi":null},
+						{"name":"character","field":"shorten","type":"text","relation":null,"multi":null},
+						{"name":"team","field":"delimiter","type":"text","default":" | ","index":-4},
+						{"name":"team","field":"website","index":-4,"type":"text"},
+						{"name":"team","field":"regex","type":"text","index":-4},
+						{"name":"team","field":"prefix","index":-3,"type":"text"},
+						{"name":"team","field":"shorten","index":-2,"type":"text"},
+						{"name":"team","field":"name","index":-1,"type":"text"},
+						{"name":"country","field":"continent","index":-2,"type":"text"},
+						{"name":"country","field":"nation","type":"relation","relation":"country","multi":null,"index":-2},
+						{"name":"country","field":"name","index":-1,"type":"text"},
+						{"name":"game","field":"name","type":"text","index":-1},
+						{"name":"game","field":"shorten","type":"text","index":-2}
 					]);
 				});
 
