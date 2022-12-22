@@ -292,6 +292,11 @@ function buildCasterList(){
 					if(po.country){
 						let countryEl = createElement({"type":"img"});
 						countryEl.src = APPRES+'/assets/country/'+po.country+'.png';
+						if(fs.existsSync(APPRES+'/assets/country/'+po.country+'.png')){
+							countryEl.src = APPRES+'/assets/country/'+po.country+'.png';
+						}else{
+							countryEl.src = APPRES+'/assets/country/'+po.country+'.svg';
+						}
 						countryEl.onerror = e => e.target.remove();
 						item.appendChild(countryEl);
 					}
