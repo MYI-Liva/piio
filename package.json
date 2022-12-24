@@ -1,25 +1,86 @@
 {
   "name": "piio",
-  "version": "0.7.33",
+  "version": "0.7.33-custom.1",
   "description": "Piio is a live production interface software",
   "main": "app/main.js",
   "scripts": {
-    "start": "electron .",
-    "debug": "electron . --debug=true --port=80",
-    "package-win": "electron-packager . piio --ignore=\"(settings.db|windowConf.db)\" --out=release-builds --prune=true --overwrite --platform=win32 --arch=x64",
-    "package-win-asar": "electron-packager . piio --out=release-builds --prune=true --overwrite --asar --platform=win32 --arch=x64",
-    "create-installer-win": "node installers/windows/createinstaller.js",
-    "build": "npm run package-win && npm run create-installer-win",
-    "build-asar": "npm run package-win-asar && npm run create-installer-win"
+    "start": "electron . --debug=true",
+    "debug": "electron . --debug=true --port=8000",
+    "make-linux": "electron-builder build --linux",
+    "make-windows": "electron-forge make --platform win32 --arch arm64 && electron-forge make --platform win32 --arch x64",
+    "make-windows-arm": "electron-forge make --platform win32 "
   },
   "keywords": [
     "piio"
   ],
-  "author": "Philipp Buerkner",
+  "author": {
+    "name": "Philipp Buerkner"
+  },
+  "contributors": [
+    {
+      "name": "Jonas Hartmer",
+      "email": "jo.hartmer@gmail.com"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/Oolonk/piio-linux/issues"
+  },
   "license": "UNLICENSED",
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel",
+          "zip"
+        ]
+      },
+      "packagerConfig": {
+        "executableName": "piio",
+        "icon": "./app/logo.ico"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "piio",
+            "title": "Production Interface IO",
+            "setupIcon": "./app/logo.ico",
+            "loadingGif": "img/loading.gif"
+          }
+        }
+      ]
+    }
+  },
+  "build": {
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "description": "Production Interface IO"
+    },
+    "appId": "de.piio",
+    "productName": "piio",
+    "icon": "app/logo.png",
+    "extraResources": [
+      "**js2/class/*",
+      "**js2/*"
+    ]
+  },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.61",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
+    "@electron-forge/maker-zip": "^6.0.0-beta.61",
     "debug": "^4.1.1",
     "electron": "^8.5.5",
+    "electron-builder": "^22.14.5",
+    "electron-forge-maker-appimage": "^22.14.7",
     "electron-packager": "^13.1.1",
     "electron-winstaller": "^3.0.4"
   },

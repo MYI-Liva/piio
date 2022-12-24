@@ -25,6 +25,7 @@ app.on('ready', async () => {
 		minimizable: false,
 		maximizable: false,
 		transparent: true,
+		icon: path.join(__dirname, 'logo.png'),
 		frame: false,
 		webPreferences:{nodeIntegration: true}
 	});
@@ -85,6 +86,7 @@ async function createMainWindow() {
 		frame: false,
 		maximizable: true,
 		show: false,
+		icon: path.join(__dirname, 'logo.png'),
 		autoHideMenuBar:true,
 		webPreferences:{devTools: _debug, experimentalFeatures :true, nodeIntegration: true}
 	});
@@ -132,6 +134,7 @@ function createWindow(event, arg){
 			minWidth: 200,
 			minHeight: 100,
 			frame: false,
+			icon: path.join(__dirname, 'logo.png'),
 			maximizable: true,
 			modal: arg.dialog || false,
 			autoHideMenuBar: true,

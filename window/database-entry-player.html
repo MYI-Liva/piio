@@ -27,7 +27,7 @@
 					<div class="id"></div>
 				</div>
 				<div id="smashgg">
-					<div class="label">Smash.gg</div>
+					<div class="label">Start.gg</div>
 					<input type="text" id="field-smashgg" />
 					<button class="red" onclick="assignSmashgg()">Assign Account</button>
 				</div>
@@ -53,6 +53,17 @@
 						<div class="value"></div>
 						<button class="merge" onclick="merge('country')"></button>
 						<button class="ignore" onclick="ignore('country')"></button>
+					</div>
+				</div>
+				<div class="field-item" id="field-city">
+					<label>City</label>
+					<div class="input">
+						<input type="text" class="value" value="" />
+					</div>
+					<div class="smashgg-diff">
+						<div class="value"></div>
+						<button class="merge" onclick="merge('city')"></button>
+						<button class="ignore" onclick="ignore('city')"></button>
 					</div>
 				</div>
 				<div class="field-item grid">
@@ -84,6 +95,11 @@
 					<div class="input">
 						<input type="date" value="" class="value" onchange="calcInsertAge()" />
 						<div id="birthday-age"></div>
+					</div>
+					<div class="smashgg-diff">
+						<div class="value"></div>
+						<button class="merge" onclick="merge('birthday');calcInsertAge()"></button>
+						<button class="ignore" onclick="ignore('birthday');calcInsertAge()"></button>
 					</div>
 				</div>
 				<div class="field-item" id="field-pronoun">
@@ -128,6 +144,17 @@
 						<div class="value"></div>
 						<button class="merge" onclick="merge('steam')"></button>
 						<button class="ignore" onclick="ignore('steam')"></button>
+					</div>
+				</div>
+				<div class="field-item" id="field-slippicode">
+					<label>Slippi-Code</label>
+					<div class="input">
+						<input type="text" class="value" value="" />
+					</div>
+					<div class="smashgg-diff">
+						<div class="value"></div>
+						<button class="merge" onclick="merge('slippicode')"></button>
+						<button class="ignore" onclick="ignore('slippicode')"></button>
 					</div>
 				</div>
 				<div class="field-item">
