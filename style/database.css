@@ -1,9 +1,9 @@
 
 #db-selection {
 	position:fixed;
-	left:0px;
+	left:1px;
 	top:24px;
-	bottom:0px;
+	bottom:1px;
 	width:200px;
 	display:flex;
 	flex-direction:column;

@@ -31,6 +31,7 @@ body {
 	margin:0;
 	font-family:segoe ui;
 }
+
 body.noPointer {
 	pointer-events: none;
 }
@@ -191,6 +192,7 @@ div.dragable.dragging {
     -webkit-user-select: none;
 	user-select: none;
 	box-shadow: 0px 0px 2px #000;
+	z-index:4;
 }
 
 .focused #titlebar {
@@ -254,4 +256,10 @@ body.maximized #titlebar .title:after {
 }
 #titlebar .controls .close:hover {
 	background-color:rgba(255,0,0,0.9);
+}
+
+#window-border {
+	position:fixed;
+	inset:0px;
+	border:1px solid #003149;
 }
