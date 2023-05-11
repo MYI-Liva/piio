@@ -335,6 +335,7 @@ body.modal #modal {
 #sb-team-name-1,
 #sb-team-name-2 {
 	display:none;
+	display:block; /* debug */
 }
 #sb.multi #sb-team-name-1,
 #sb.multi #sb-team-name-2 {

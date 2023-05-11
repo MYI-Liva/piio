@@ -5,6 +5,8 @@ const fs = require("fs");
 const EventEmitter = require('events');
 var event = new EventEmitter();
 
+const _debug = process.argv.includes("--debug=true");
+
 var windowConf = new nedb({ filename: path.join(app.getPath("userData"), 'windowConf.db'), autoload:true });
 
 app.setAppUserModelId(process.execPath);

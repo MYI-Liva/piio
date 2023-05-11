@@ -21,7 +21,7 @@ process.argv.forEach((arg) => {
 	}
 });
 
-_debug = global.ARGV.hasOwnProperty("debug") && global.ARGV.debug !== 'false';
+const _debug = global.ARGV.hasOwnProperty("debug") && global.ARGV.debug !== 'false';
 
 var APPROOT = global.APPROOT = electron.APP.getAppPath();
 var APPRES = global.APPRES = electron.APP.getAppPath();

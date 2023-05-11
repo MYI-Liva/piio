@@ -62,6 +62,7 @@ async function selectDatabase(name){
 	document.getElementById("db-select-"+name).classList.add("selected");
 	_currentDB = name;
 	_keys = await db.get("dbstruct", {"name":_currentDB, $not:{"listhide":true}}, {sort:{index:-1}});
+	_keys.push({field: "_id", type: "text"});
 	getList();
 }
 
@@ -100,7 +101,7 @@ async function getList(){
 function displayList(list){
 	var el = document.getElementById('list-grid');
 	el.innerHTML = "";
-	el.style.gridTemplateColumns = "repeat("+_keys.length+", 1fr)";
+	el.style.gridTemplateColumns = `repeat(${_keys.length}, 1fr)`;
 	_keys.forEach((key) => {
 		let field = document.createElement("div");
 		field.classList.add("label");
@@ -111,7 +112,8 @@ function displayList(list){
 		_keys.forEach((key) => {
 			let field = document.createElement("div");
 			field.id = "field-"+index+"-"+key.field;
-			field.classList.add("field-row-"+index);
+			field.classList.add(`field-row-${index}`);
+			field.classList.toggle(`field-is-id`, key.field == "_id");
 			field.classList.toggle("selected", _selectedFields.indexOf(entry._id) !== -1);
 			if(entry[key.field]){
 				if(key.multi){	

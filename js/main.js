@@ -108,7 +108,7 @@ async function init(){
 	
 	_ws = new WSWrapper(null, remote.getGlobal("ARGV").port);
 	
-	_ws.on("open", () => _ws.send(JSON.stringify({"type":"subscribe","data":"*"}))); 
+	_ws.on("open", () => _ws.send(JSON.stringify({type: "subscribe", data: "*"}))); 
 	_ws.on("open", () => fire("ws-ready")); 
 	_ws.on("data-cmd", handleWsCommand);
 	
@@ -172,12 +172,14 @@ function buildTeamPlayerList(){
 	scoreboard.ports = [];
 	scoreboard.seatorder = [];
 	document.getElementById('sb').classList.toggle("multi", teamSize > 1);
+
 	var tpl = document.getElementById("sb-player-tpl");
-	for(let teamNum = 1;teamNum <= 2; teamNum++){
+	for(let teamNum = 1; teamNum <= 2; teamNum++){
+
 		// Player fields
 		let teamPlayerField = document.getElementById('sb-players-'+teamNum).truncate();
-		for(let i = 0;i < teamSize; i++){
-
+		for(let i = 0; i < teamSize; i++){
+			
 			let playerItemEl = createElement({
 				"type":"div",
 				"className":"player-item",
@@ -196,22 +198,22 @@ function buildTeamPlayerList(){
 			playerItemEl.dataset.team = teamNum;
 			playerItemEl.dataset.player = i;
 
-			playerNameElm.id = "playername-"+teamNum+"-"+i;
-			playerNameElm.value = scoreboard.teams[teamNum].players[i] ? scoreboard.teams[teamNum].players[i].name : "";
+			playerNameElm.id = `playername-${teamNum}-${i}`;
+			playerNameElm.value = scoreboard?.teams[teamNum]?.players?.[i]?.name ?? "";
 			playerNameElm.tabIndex = teamNum*teamSize + i;
 			playerNameElm.oninput = playerNameInput;
-			characterElm.onclick = e => openCharacterSelect(teamNum, i);
+			characterElm.onclick = () => openCharacterSelect(teamNum, i);
 			playerEditBtn.onclick = editPlayer;
 			playerAddBtn.onclick = editPlayer;
-			playerSelectCxb.onclick = e => setPlayerActive(teamNum, i);
-			playerOutCxb.onclick = e => setPlayerOut(teamNum, i);
+			playerSelectCxb.onclick = () => setPlayerActive(teamNum, i);
+			playerOutCxb.onclick = () => setPlayerOut(teamNum, i);
 			
-			portNumberBtns.id = "playerport-"+teamNum+"-"+i;
+			portNumberBtns.id = `playerport-${teamNum}-${i}`;
 			for(let portNum = 1; portNum <= portAmount; portNum++){
 				let portBtn = document.createElement("div");
 				portBtn.classList.add("port");
 				portBtn.innerText = portNum;
-				portBtn.id = "playerport-"+portNum+"-"+teamNum+"-"+i;
+				portBtn.id = `playerport-${portNum}-${teamNum}-${i}`;
 				portBtn.onclick = e => assignPlayerPort(portNum, teamNum, i);
 				
 				portNumberBtns.appendChild(portBtn);
@@ -225,7 +227,7 @@ function buildTeamPlayerList(){
 			
 		}
 		// Team Player Swap Buttons
-		let swapButtonField = document.getElementById('sb-players-swap-'+teamNum).truncate();
+		let swapButtonField = document.getElementById(`sb-players-swap-${teamNum}`).truncate();
 		for(let swapButton = 1; swapButton < teamSize; swapButton++){
 			swapButtonField.appendChild(createElement({
 				"type":"button",
@@ -240,12 +242,11 @@ function buildCasterList(){
 	var tpl = document.getElementById('caster-item-tpl');
 	var el = document.getElementById('caster').truncate();
 	for(let casterNum = 0; casterNum < (_theme.caster || 2); casterNum++){
-		let item = createElement({"type":"div","className":"item","append":tpl.content.cloneNode(true)});
+		let item = createElement({type: "div", className: "item", append: tpl.content.cloneNode(true)});
 		let nameTbx = item.querySelector("input");
-		// let selectionElm = item.querySelector(".selection");
 		let selectedIndex = -1;
 
-		sortable(item, ["div.player-options",".search"], (indexList) => {
+		sortable(item, ["div.player-options", ".search"], (indexList) => {
 			let newCasterOrder = [];
 			indexList.forEach((item) => newCasterOrder.push(scoreboard.caster[item[0]]));
 			scoreboard.caster = newCasterOrder;
@@ -253,9 +254,9 @@ function buildCasterList(){
 		});
 		
 		// open caster selection by focusing the input element
-		item.querySelector(".info").onclick = function(e){
-			var el = e.currentTarget.parentNode;
-			var tbx = el.querySelector("input");
+		item.querySelector(".info").onclick = (e) => {
+			let el = e.currentTarget.parentNode;
+			let tbx = el.querySelector("input");
 			el.querySelector(".search").classList.add("visible");
 			tbx.value = scoreboard.caster[e.currentTarget.parentNode.getIndex()].name;
 			tbx.focus();
@@ -291,7 +292,7 @@ function buildCasterList(){
 			
 					if(po.country){
 						let countryEl = createElement({"type":"img"});
-						countryEl.src = APPRES+'/assets/country/'+po.country+'.png';
+						countryEl.src = `${APPRES}/assets/country/${po.country}.png`;
 						if(fs.existsSync(APPRES+'/assets/country/'+po.country+'.png')){
 							countryEl.src = APPRES+'/assets/country/'+po.country+'.png';
 						}else{
@@ -311,11 +312,11 @@ function buildCasterList(){
 					}
 					item.classList.toggle("highlighted", selectedIndex == index);
 					
-					item.onclick = e => { // caster select item clicked 
+					item.onclick = (e) => { // caster select item clicked 
 						nameTbx.blur();
 						setCaster(e.target.getIndexIn(document.getElementById('caster')), po);
 					};
-					item.onmousedown = e => e.preventDefault();
+					item.onmousedown = (e) => e.preventDefault();
 					selectionElm.appendChild(item);
 				});
 				
@@ -325,32 +326,35 @@ function buildCasterList(){
 		nameTbx.oninput = nameTxbInput;
 		nameTbx.onfocus = nameTxbInput;
 		nameTbx.onblur = () => item.querySelector(".search").classList.remove("visible");
-		nameTbx.onkeydown = e => {
+		nameTbx.onkeydown = (e) => {
 			let selectionElm = e.target.parentNode.querySelector(".selection");
 			if(e.code == "ArrowDown"){
-				if(selectedIndex == -1)
-					selectedIndex++;
-				selectedIndex++;
+				selectedIndex = Math.max(selectedIndex, 0) + 1;
 				e.preventDefault();
 			}
 			if(e.code == "ArrowUp"){ 
-				selectedIndex--;
-				if(selectedIndex < 0)
-					selectedIndex = 0;
+				selectedIndex = Math.max((selectedIndex - 1), 0);
 				e.preventDefault();
 			}
-			if(selectedIndex > -1){
-				if(selectedIndex >= selectionElm.querySelectorAll("div.item").length)
-					selectedIndex = selectionElm.querySelectorAll("div.item").length - 1;
-				selectionElm.querySelectorAll("div.item").forEach(el => el.classList.remove("highlighted"));
-				let selectedElm = selectionElm.querySelector("div.item:nth-child("+(selectedIndex+1)+")");
-				selectedElm.classList.add("highlighted");
-				let height = parseInt(document.defaultView.getComputedStyle(selectedElm, '').getPropertyValue('height').substr(0,2));
-				selectionElm.scrollTop = selectedIndex*height - 150;
-				if(e.code == "Enter"){
-					selectedElm.click();
-					e.preventDefault();
-				}
+
+			if(selectedIndex == -1){ return; }
+
+			let allSelectionItems = selectionElm.querySelectorAll("div.item");
+
+			// limit selectedIndex max value
+			selectedIndex = Math.min(selectedIndex, allSelectionItems.length - 1);
+
+			// remove highlight class
+			allSelectionItems.forEach((el) => el.classList.remove("highlighted"));
+
+			let selectedElm = selectionElm.querySelector("div.item:nth-child("+(selectedIndex+1)+")");
+			selectedElm.classList.add("highlighted");
+			let height = parseInt(document.defaultView.getComputedStyle(selectedElm, '').getPropertyValue('height').substr(0,2));
+			selectionElm.scrollTop = selectedIndex*height - 150;
+
+			if(e.code == "Enter"){
+				selectedElm.click();
+				e.preventDefault();
 			}
 		}
 		el.appendChild(item);
@@ -367,7 +371,7 @@ on("themechanged", buildCasterList);
 
 function sortable(elm, exclude, callback){
 	elm.classList.add("dragable");
-	elm.onpointerdown = e => {
+	elm.onpointerdown = (e) => {
 		
 		let initPos = e.clientX,
 			origPos = [],
@@ -421,9 +425,9 @@ function buildFieldList(){
 	// fix fields in scoreboard.fields
 	var el = document.getElementById('fields').truncate();
 	_theme.fields.forEach(field => {
-		let item = createElement({"type":"div","className":"item","append":createField(field)});
+		let item = createElement({type: "div", className: "item", append: createField(field)});
 		if(field.checkbox){
-			let cbx = createElement({"type":"input", "id":"field-"+field.name+"-cbx", "className":"toggle"})
+			let cbx = createElement({type: "input", id: `field-${field.name}-cbx`, className: "toggle"})
 			cbx.type = "checkbox";
 			cbx.onchange = e => {
 				scoreboard.fields[field.name].enabled = e.target.checked;
@@ -496,11 +500,11 @@ async function playerNameInput(e){
 	let parent = txb.closest("div.player-item");
 	let {team, player} = parent.dataset;
 	let name = txb.value;
-	let players = await db.get("player", {"name": {$regex: new RegExp(`^${name}$`, 'i')}}, {"sort":{"lastActivity":-1}});
-	let po = {"name": name};
+	let players = await db.get("player", {name: {$regex: new RegExp(`^${name}$`, 'i')}}, {sort: {lastActivity: -1}});
+	let po = {name};
 
 	if(players.length > 0){
-		po = players.find(x => x.name == name) || players[0];
+		po = players.find(x => x.name == name) ?? players[0];
 	}
 
 	scoreboard.teams[team].players[player] = new Player(po);
@@ -522,21 +526,21 @@ async function setCaster(index, co){
 	bgWork.start("setCaster");
 	scoreboard.caster[index] = co;
 	
-	var casterEl = document.querySelectorAll("#caster > div")[index];
+	let casterEl = document.querySelectorAll("#caster > div")[index];
 	if(casterEl){
+		let editBtn = casterEl.querySelector(".info .player-options .player-edit-btn");
 		casterEl.querySelector(".info .name").innerText = co.name;
 		casterEl.querySelector(".info .twitter").innerText = co.twitter;
 		if(co.HasSmashgg && co.InDB){
 			let id = co.ID;
 			getSmashggDifferences(co).then((res) => {
 				if(scoreboard.caster[index]._id != id){return;} // outdated request - quit out
-				casterEl.querySelector(".info .player-options .player-edit-btn").classList.toggle("outdated", res.differences.length > 0);
+				editBtn.classList.toggle("outdated", res.differences.length > 0);
 			});
 		}else{
-			casterEl.querySelector(".info .player-options .player-edit-btn").classList.remove("outdated");
+			editBtn.classList.remove("outdated");
 		}
-		casterEl.querySelector(".info .player-options .player-edit-btn").disabled = !co.InDB;
-		
+		editBtn.disabled = !co.InDB;
 		fire("scoreboardchanged");
 	}
 	bgWork.finish("setCaster");
@@ -584,9 +588,9 @@ function setTeamSize(size){
 }
 
 function setTeamType(num){
-	var teamTypes = ["teams","crews","ironman"];
-	for(let i = 0; i < teamTypes.length; i++){
-		document.getElementById("sb").classList.toggle('teamtype-'+teamTypes[i], i == num);
+	var teamTypes = ["teams", "crews", "ironman"];
+	for(let i in teamTypes){
+		document.getElementById("sb").classList.toggle(`teamtype-${teamTypes[i]}`, i == num);
 	}
 	document.getElementById('team-type-select').value = num;
 	scoreboard.type = teamTypes[num];
@@ -604,14 +608,14 @@ function modifyScore(team, inc, absolute){
 	if(value < 0 || isNaN(value))
 		value = 0;
 	scoreboard.teams[team].score = value;
-	document.getElementById('sb-score-val-'+team).value = value;
+	document.getElementById(`sb-score-val-${team}`).value = value;
 	fire("scoreboardchanged", true);
 }
 
 function setTeamState(team, state){
-	let el = document.getElementById('sb-state-'+team);
-	el.classList.toggle("winners", state==1);
-	el.classList.toggle("losers", state==2);
+	let el = document.getElementById(`sb-state-${team}`);
+	el.classList.toggle("winners", state == 1);
+	el.classList.toggle("losers", state == 2);
 	scoreboard.teams[team].state = state;
 	fire("scoreboardchanged", true);
 }
@@ -625,7 +629,7 @@ function clearBoard(){
 		team.score = 0;
 		team.state = 0;
 	}
-	scoreboard.ports = [null,null,null,null];
+	scoreboard.ports = [null, null, null, null];
 	scoreboard.smashgg = null;
 	
 	fire("scoreboardsmashggchanged");
@@ -709,12 +713,12 @@ async function openCharacterSelect(teamNum, playerNum){
 	var characters = await db.get("character", {game: scoreboard.game});
 	characters = characters.map(x => new Character(x));
 	
-	var path = APPRES + "/assets/character/"+scoreboard.game;
+	let path = `${APPRES}/assets/character`;
 	
 	characters.push(new Character());
 	
 	characters.forEach((co) => {
-		let rosterItem = createElement({"type":"div","className":"item","text":co.Shorten});
+		let rosterItem = createElement({"type":"div","className":"item","text": co.Shorten});
 		if(co.DefaultSkin){
 			fileExists(`${path}/${co.ID}/stock/${co.DefaultSkin}.png`).then((ok) => {
 				if(!ok){return;}
@@ -812,7 +816,7 @@ async function setCharacter(teamNum, playerNum, characterID, costumeIndex) {
 
 async function setCharacterIcon(teamNum, playerNum, game, id, skin, label){
 	let charBtn = document.querySelector("#playeritem-"+teamNum+"-"+playerNum+" button.character-select-btn .icon");
-	let path = `${APPRES}/assets/character/${game}/${id}/stock/${skin}.png`;
+	let path = `${APPRES}/assets/character/${id}/stock/${skin}.png`;
 	let charIconFileExists = await fileExists(path);
 	charBtn.innerText = charIconFileExists ? "" : label;
 	charBtn.style.backgroundImage = charIconFileExists ? `url('${path}')` : "";
@@ -821,8 +825,8 @@ async function setCharacterIcon(teamNum, playerNum, game, id, skin, label){
 function showModal(name){
 	var el = document.querySelector("#modal .panel").truncate();
 	el.currentModalName = name;
-	el.appendChild(document.getElementById(name+"-modal-tpl").content.cloneNode(true));
-	el.id = name+"-modal";
+	el.appendChild(document.getElementById(`${name}-modal-tpl`).content.cloneNode(true));
+	el.id = `${name}-modal`;
 	document.body.classList.add("modal");
 	window.addEventListener("keydown", modalHotkeys, true);
 }
@@ -852,12 +856,16 @@ async function insertTeamUI(teamNum){
 
 	scoreboard.teams[teamNum].players.forEach((po, playerNum) => insertPlayerUI(teamNum, playerNum));
 	
-	var teamNameTbx = document.getElementById('sb-team-name-val-'+teamNum);
+	// insert team name
+	var teamNameTbx = document.getElementById(`sb-team-name-val-${teamNum}`);
 	teamNameTbx.placeholder = scoreboard.teams[teamNum].players.map(x => x.name).filter(x => x.length > 0).join(" / ");
-	teamNameTbx.value = scoreboard.teams[teamNum].name;
-	document.getElementById('sb-score-val-'+teamNum).value = scoreboard.teams[teamNum].score;
+
+	// if its 1v1, remove team name
+	teamNameTbx.value = scoreboard.teams[teamNum].players.length == 1 ? "" : scoreboard.teams[teamNum].name;
+
+	document.getElementById(`sb-score-val-${teamNum}`).value = scoreboard.teams[teamNum].score;
 	
-	let stateEl = document.getElementById('sb-state-'+teamNum);
+	let stateEl = document.getElementById(`sb-state-${teamNum}`);
 	stateEl.classList.toggle("winners", scoreboard.teams[teamNum].state == 1);
 	stateEl.classList.toggle("losers", scoreboard.teams[teamNum].state == 2);
 }
@@ -897,7 +905,6 @@ async function insertPlayerUI(teamNum, playerNum){
 		pEl.querySelector(".player-edit-btn").classList.toggle("outdated", res.differences.length > 0);
 	});
 
-
 	if(po.InDB){
 		db.get("team", {$or: [].concat(po.team).map(x => ({"_id":x}))}).then(entry => {
 			let value = entry.map(x => x.name).join(", ");
@@ -912,7 +919,6 @@ async function insertPlayerUI(teamNum, playerNum){
 		pEl.querySelector(".player-multi-btn").disabled = true;
 	}
 }
-
 
 function playerChangedHandler(docs){
 	for(let teamNum in scoreboard.teams){
@@ -955,8 +961,8 @@ function insertScoreboardData(newScoreboard){
 	scoreboard.caster = scoreboard.caster.map((caster) => (caster instanceof Player ? caster : new Player(caster)));
 	
 	for(let fieldName in scoreboard.fields){
-		document.getElementById("field-"+fieldName).value = scoreboard.fields[fieldName].value;
-		let cbx = document.getElementById("field-"+fieldName+"-cbx");
+		document.getElementById(`field-${fieldName}`).value = scoreboard.fields[fieldName].value;
+		let cbx = document.getElementById(`field-${fieldName}-cbx`);
 		if(cbx){
 			cbx.checked = scoreboard.fields[fieldName].enabled;
 		}
@@ -1038,7 +1044,6 @@ function buildSeatOrder(affectedSeat){
 
 async function editPlayer(arg){
 	let po, returnId, parentEl;
-
 	if(arg instanceof Event){
 		parentEl = arg.currentTarget.closest("div.player-item");
 		let {team, player} = parentEl.dataset;
@@ -1049,17 +1054,10 @@ async function editPlayer(arg){
 		if(arg.currentTarget.classList.contains("player-create-btn")){
 			po._id = "";
 		}
-
 	}else if(arg){
 		po = arg;
 	}
-	
-	let res = await openWindow("database-entry", {db:"player", entry: new Player(po)});
-
-	if(parentEl && parseInt(parentEl.dataset.returnId) == returnId){
-		console.log("edit player res:", res);
-	}
-
+	await openWindow("database-entry", {db: "player", entry: new Player(po)});
 }
 
 async function buildPlayerAutoCompleteList(){
@@ -1265,7 +1263,7 @@ async function insertMatchList(sb){
 			if(entry.caster[i]._id.length > 0 && entry.caster[i]._id == caster._id){return;}
 			if(entry.caster[i]._id.length == 0 && entry.caster[i].name == caster.name){return;}
 		}
-		entry.caster.push({"_id":caster._id, "name":caster.name});
+		entry.caster.push({_id: caster._id, name: caster.name});
 	});
 	
 	// overwrite fields
@@ -1275,11 +1273,11 @@ async function insertMatchList(sb){
 		}
 	});
 	
-	db.update("match", {"_id":entry._id}, entry);
+	db.update("match", {_id: entry._id}, entry);
 }
 
 async function newMatch(noClear){
-	await db.add("match", {"teams":[], "caster":[], "characters":{}, "fields":{}, "_D":new Date()});
+	await db.add("match", {"teams": [], "caster": [], "characters": {}, "fields": {}, "_D": new Date()});
 	if(noClear != true){
 		clearBoard();
 	}
@@ -1364,7 +1362,7 @@ function release(name){
 }
 
 var bgWork = {
-	workers:[],
+	workers: [],
 	start: function(name){
 		if(this.workers.indexOf(name) == -1)
 			this.workers.push(name);

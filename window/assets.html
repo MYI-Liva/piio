@@ -18,22 +18,27 @@
 	<body>
 		<div id="titlebar"></div>
 		<div id="window-border"></div>
-		<nav id="assets-selection">
-			<a onclick="showAssetsList({path:'player', name:'Player'})"><span class="name">Player</span></a>
-			<a onclick="showAssetsList({path:'country', name:'Country'})"><span class="name">Country Flag</span></a>
-			<a onclick="showAssetsList({path:'character', name:'Character'})"><span class="name">Character</span></a>
-			<a onclick="showAssetsList({path:'game', name:'Game'})"><span class="name">Game</span></a>
-			<a onclick="showAssetsList({path:'team', name:'Team'})"><span class="name">Team</span></a>
-		</nav>
 		<div id="main">
 			<div id="filter">
-				<input type="text" id="search-txb" oninput="getList();" value="" placeholder="Search..." />
+				<input type="text" id="search-txb" value="" placeholder="Search..." />
+				<div id="filter-categorie-select-area"></div>
+				<input type="range" id="preview-image-scale" min="20" max="300" value="100" onchange="changePreviewScaling(this.value)" />
+				<button onclick="openBatchUpload()">Batch Upload</button>
 			</div>
 			<div id="path"></div>
 			<div id="list">
 				<div id="list-grid"></div>
 			</div>
 			<div id="page-list"></div>
+			<div id="asset-quick-info">
+				<div class="arrow"></div>
+				<div id="asset-quick-info-filename"></div>
+				<div id="asset-quick-info-size"></div>
+				<div id="asset-quick-info-filepath"></div>
+			</div>
+		</div>
+		<div id="batch-upload">
+			<div id="batch-upload-select">test</div>
 		</div>
 	</body>
 

@@ -77,6 +77,13 @@
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
+
+#list-grid > div.field-is-id {
+	font-size:0.6em;
+	overflow:visible;
+	text-overflow:initial;
+}
+
 #list-grid > div.selected {
 	background:#036;
 }
